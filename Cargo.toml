@@ -18,6 +18,8 @@ panic-halt = "1.0.0"
 # use same version as ch32-hal
 qingke = "*"
 qingke-rt = "*"
+smart-leds = "0.4.0"
+ws2812-delay = { version = "0.1.0", git = "https://github.com/rappet/ws2812-delay-rs.git", features = ["slow"]}
 
 
 [profile.release]
