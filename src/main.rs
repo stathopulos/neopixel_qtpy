@@ -7,7 +7,8 @@ use ch32_hal as hal;
 use core::iter::once;
 use hal::delay::Delay;
 use hal::gpio::{Level, Output, Speed};
-use smart_leds::{SmartLedsWrite, RGB8};
+use smart_leds::hsv::{hsv2rgb, Hsv};
+use smart_leds::SmartLedsWrite;
 use ws2812_delay::Ws2812;
 
 #[qingke_rt::entry]
@@ -21,24 +22,20 @@ fn main() -> ! {
     let pin = Output::new(p.PA4, Level::Low, Speed::High);
     let mut led = Ws2812::new(Delay, pin);
 
-    let mut color = RGB8 { r: 255, g: 0, b: 0 };
-
-    let _ = led.write(once(color));
+    let mut color = Hsv {
+        hue: 0,
+        sat: 255,
+        val: 255,
+    };
 
     loop {
-        if color.r == 255 {
-            color = RGB8 { r: 0, g: 0, b: 255 }
-        } else {
-            color = RGB8 { r: 255, g: 0, b: 0 }
-        };
-        
-        let _ = led.write(once(color));
-
-        delay.delay_ms(500);
+        color.hue = color.hue.wrapping_add(1);
+        let _ = led.write(once(hsv2rgb(color)));
+        delay.delay_ms(10);
     }
 }
 
 #[panic_handler]
-fn panic(info: &core::panic::PanicInfo) -> ! {
+fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}
 }
