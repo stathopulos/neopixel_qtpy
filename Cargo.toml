@@ -13,7 +13,6 @@ ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", features = [
 ], default-features = false }
 
 embedded-hal = "1.0.0"
-panic-halt = "1.0.0"
 
 # use same version as ch32-hal
 qingke = "*"
